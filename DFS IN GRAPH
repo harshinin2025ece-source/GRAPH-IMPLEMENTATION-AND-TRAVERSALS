@@ -1,0 +1,97 @@
+// IMPLEMENTATION OF GRAPH  and DFS
+#include <stdio.h>
+#include<stdlib.h>
+#include <stdbool.h>
+struct node{
+    int vertices;
+    struct node* next;
+};
+struct stack
+{
+    int items[10];
+    int top;
+    
+};
+void initstack(struct stack* s1)
+{
+    s1->top=-1;
+}
+void push(struct stack * s1, int d)
+{
+    s1->items[++(s1->top)]=d;
+}
+int pop(struct stack* s1)
+{
+    return s1->items[(s1->top)--];
+    
+}
+struct node* cn(int d)
+{
+    struct node* n=(struct node*)malloc(sizeof(struct node));
+    n->vertices=d;
+    n->next=NULL;
+}
+void addedge(struct node* adj[], int src, int dest)
+{
+    struct node* nnp=cn(dest);
+    nnp->next=adj[src];
+    adj[src]=nnp;
+    
+    struct node* nnp1=cn(src);
+    nnp1->next=adj[dest];
+    adj[dest]=nnp1;
+}
+int isempty(struct stack *s)
+{
+      return (s->top==-1);
+    
+}
+void depthfirstsearch(struct node* adj[],int sn,int n)
+{
+    int visited[10]={0};
+    struct stack s1;
+    initstack(&s1);
+    push(&s1,sn);
+    while(!isempty(&s1))
+    {
+         int curr=pop(&s1);
+         if(!visited[curr])
+         {
+             printf("%d ",curr);
+             visited[curr]=1;
+             struct node* t=adj[curr];
+             while(t!=NULL)
+             {
+                 if(!visited[t->vertices])
+                 {
+                     push(&s1,t->vertices);
+                 }
+                 t=t->next;
+                 
+             }
+         }
+         
+    }
+   
+    
+    
+    
+}
+int main() 
+{
+    struct stack* s1=NULL;
+    int n=6;
+    struct node* adj[n];
+    for(int i=0;i<n;i++)
+    {
+        adj[i]=NULL;
+    }
+    addedge(adj,0,2);
+    addedge(adj,0,3);
+    addedge(adj,3,2);
+    addedge(adj,3,4);
+    addedge(adj,2,1);
+    addedge(adj,4,3);
+    depthfirstsearch(adj,0,n);
+    
+}
