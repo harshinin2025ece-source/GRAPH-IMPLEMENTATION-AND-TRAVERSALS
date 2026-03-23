@@ -1,0 +1,106 @@
+// IMPLEMENTATION OF GRAPH  and BFS
+#include <stdio.h>
+#include<stdlib.h>
+struct node{
+    int vertices;
+    struct node* next;
+};
+struct queue
+{
+    int items[10];
+    int front;
+    int rear;
+    
+};
+void initqueue(struct queue* q1)
+{
+    q1->front=-1;
+    q1->rear=-1;
+}
+void enqueue(struct queue * q1, int d)
+{
+    q1->front=0;
+    q1->items[++(q1->rear)]=d;
+}
+int dequeue(struct queue* q1)
+{
+    int val = q1->items[q1->front];
+
+    if(q1->front == q1->rear)
+        q1->front = q1->rear = -1;
+    else
+        q1->front++;
+
+    return val;
+    
+}
+struct node* cn(int d)
+{
+    struct node* n=(struct node*)malloc(sizeof(struct node));
+    n->vertices=d;
+    n->next=NULL;
+}
+void addedge(struct node* adj[], int src, int dest)
+{
+    struct node* nnp=cn(dest);
+    nnp->next=adj[src];
+    adj[src]=nnp;
+    
+    struct node* nnp1=cn(src);
+    nnp1->next=adj[dest];
+    adj[dest]=nnp1;
+}
+int isempty(struct queue *q)
+{
+      return (q->front==-1&&q->rear==-1);
+    
+}
+void BREADTHfirstsearch(struct node* adj[],int sn,int n)
+{
+    int visited[10]={0};
+    struct queue q1;
+    initqueue(&q1);
+    enqueue(&q1,sn);
+    while(!isempty(&q1))
+    {
+         int curr=dequeue(&q1);
+         if(!visited[curr])
+         {
+             printf("%d ",curr);
+             visited[curr]=1;
+             struct node* t=adj[curr];
+             while(t!=NULL)
+             {
+                 if(!visited[t->vertices])
+                 {
+                     enqueue(&q1,t->vertices);
+                 }
+                 t=t->next;
+                 
+             }
+         }
+         
+    }
+   
+    
+    
+    
+}
+int main() 
+{
+    struct queue* q1=NULL;
+    int n=6;
+    struct node* adj[n];
+    for(int i=0;i<n;i++)
+    {
+        adj[i]=NULL;
+    }
+    addedge(adj,0,2);
+    addedge(adj,0,3);
+    addedge(adj,3,2);
+    addedge(adj,3,4);
+    addedge(adj,2,1);
+    addedge(adj,4,3);
+    BREADTHfirstsearch(adj,0,n);
+    
+}
